@@ -82,7 +82,7 @@ const ChatInterface = () => {
     return () => {
       speechSynthesis.removeEventListener('end', handleSpeechEnd);
     };
-  }, []);
+  }, [speechSynthesis]);
 
   // 保存消息到本地存储
   useEffect(() => {
@@ -216,14 +216,15 @@ const ChatInterface = () => {
               const parsed = JSON.parse(data);
               const content = parsed.choices[0]?.delta?.content || '';
               if (content) {
-                accumulatedContent += content;
+                const newContent = accumulatedContent + content;
+                accumulatedContent = newContent;
                 setMessages(prev => {
                   const newMessages = [...prev];
                   const lastMessage = newMessages[newMessages.length - 1];
                   if (lastMessage.role === 'assistant') {
-                    lastMessage.content = accumulatedContent;
+                    lastMessage.content = newContent;
                     // 检测代码块
-                    if (accumulatedContent.includes('```')) {
+                    if (newContent.includes('```')) {
                       lastMessage.type = 'code';
                     }
                   }
