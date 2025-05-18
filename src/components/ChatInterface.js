@@ -182,7 +182,7 @@ const ChatInterface = () => {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer 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',
+          'Authorization': 'Bearer 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',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
