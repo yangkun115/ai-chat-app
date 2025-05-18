@@ -11,7 +11,6 @@ import {
   Tooltip,
   Menu,
   MenuItem,
-  Divider,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import PersonIcon from '@mui/icons-material/Person';
