@@ -22,10 +22,14 @@ import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from '../context/ThemeContext';
 
 const ChatInterface = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
   const [messages, setMessages] = useState(() => {
     const savedMessages = localStorage.getItem('chatMessages');
     return savedMessages ? JSON.parse(savedMessages) : [];
@@ -280,8 +284,8 @@ const ChatInterface = () => {
       height: '100vh', 
       display: 'flex', 
       flexDirection: 'column',
-      bgcolor: '#343541',
-      color: '#fff',
+      bgcolor: isDarkMode ? '#343541' : '#ffffff',
+      color: isDarkMode ? '#fff' : '#333',
       position: 'relative',
     }}>
       {/* 顶部标题栏 */}
@@ -289,8 +293,8 @@ const ChatInterface = () => {
         position: 'sticky',
         top: 0,
         zIndex: 1,
-        bgcolor: '#343541',
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        bgcolor: isDarkMode ? '#343541' : '#ffffff',
+        borderBottom: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
         py: 2,
         px: 3,
         display: 'flex',
@@ -305,20 +309,25 @@ const ChatInterface = () => {
         }}>
           AI 助手
         </Typography>
-        <IconButton 
-          onClick={handleMenuOpen}
-          sx={{ color: '#fff' }}
-        >
-          <MoreVertIcon />
-        </IconButton>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <IconButton 
+            onClick={handleMenuOpen}
+            sx={{ color: isDarkMode ? '#fff' : '#333' }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <IconButton onClick={toggleTheme} color="inherit">
+            {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+        </Box>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
           PaperProps={{
             sx: {
-              bgcolor: '#40414f',
-              color: '#fff',
+              bgcolor: isDarkMode ? '#40414f' : '#ffffff',
+              color: isDarkMode ? '#fff' : '#333',
             }
           }}
         >
@@ -339,10 +348,10 @@ const ChatInterface = () => {
           width: '8px',
         },
         '&::-webkit-scrollbar-track': {
-          background: '#343541',
+          background: isDarkMode ? '#343541' : '#f5f5f5',
         },
         '&::-webkit-scrollbar-thumb': {
-          background: '#565869',
+          background: isDarkMode ? '#565869' : '#bdbdbd',
           borderRadius: '4px',
         },
       }}>
@@ -372,13 +381,17 @@ const ChatInterface = () => {
                 width: '100%',
                 display: 'flex',
                 gap: 2,
-                bgcolor: message.role === 'user' ? '#343541' : '#444654',
+                bgcolor: message.role === 'user' 
+                  ? (isDarkMode ? '#343541' : '#f5f5f5')
+                  : (isDarkMode ? '#444654' : '#ffffff'),
                 py: 3,
                 px: { xs: 2, sm: 4 },
                 borderRadius: '8px',
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  boxShadow: isDarkMode 
+                    ? '0 4px 12px rgba(0,0,0,0.2)'
+                    : '0 4px 12px rgba(0,0,0,0.1)',
                 },
               }}
             >
@@ -401,7 +414,7 @@ const ChatInterface = () => {
                   alignItems: 'flex-start',
                   mb: 1,
                 }}>
-                  <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+                  <Typography variant="caption" sx={{ color: isDarkMode ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)' }}>
                     {message.timestamp}
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 1 }}>
@@ -411,8 +424,10 @@ const ChatInterface = () => {
                           size="small"
                           onClick={() => handleSpeak(message)}
                           sx={{ 
-                            color: speaking && currentSpeakingMessage === message ? '#10a37f' : 'rgba(255,255,255,0.6)',
-                            '&:hover': { color: '#fff' }
+                            color: speaking && currentSpeakingMessage === message 
+                              ? '#10a37f' 
+                              : (isDarkMode ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'),
+                            '&:hover': { color: isDarkMode ? '#fff' : '#333' }
                           }}
                         >
                           {speaking && currentSpeakingMessage === message ? <VolumeOffIcon fontSize="small" /> : <VolumeUpIcon fontSize="small" />}
@@ -424,8 +439,8 @@ const ChatInterface = () => {
                         size="small"
                         onClick={() => handleCopyMessage(message.content)}
                         sx={{ 
-                          color: 'rgba(255,255,255,0.6)',
-                          '&:hover': { color: '#fff' }
+                          color: isDarkMode ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)',
+                          '&:hover': { color: isDarkMode ? '#fff' : '#333' }
                         }}
                       >
                         <ContentCopyIcon fontSize="small" />
@@ -440,6 +455,7 @@ const ChatInterface = () => {
                     fontSize: '1rem',
                     whiteSpace: 'pre-wrap',
                     wordBreak: 'break-word',
+                    color: isDarkMode ? '#fff' : '#333',
                   }
                 }}>
                   {renderMessageContent(message)}
@@ -468,9 +484,9 @@ const ChatInterface = () => {
 
       {/* 输入框区域 */}
       <Box sx={{ 
-        borderTop: '1px solid rgba(255,255,255,0.1)',
+        borderTop: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
         p: 2,
-        bgcolor: '#343541',
+        bgcolor: isDarkMode ? '#343541' : '#ffffff',
         position: 'sticky',
         bottom: 0,
       }}>
@@ -478,7 +494,7 @@ const ChatInterface = () => {
           <Box sx={{ 
             display: 'flex', 
             gap: 1,
-            bgcolor: '#40414f',
+            bgcolor: isDarkMode ? '#40414f' : '#f5f5f5',
             borderRadius: '12px',
             p: 1.5,
             transition: 'all 0.3s ease',
@@ -498,7 +514,7 @@ const ChatInterface = () => {
               maxRows={4}
               sx={{
                 '& .MuiInputBase-root': {
-                  color: '#fff',
+                  color: isDarkMode ? '#fff' : '#333',
                   fontSize: '1rem',
                 },
                 '& .MuiInput-underline:before': {
@@ -508,7 +524,13 @@ const ChatInterface = () => {
                   borderBottom: 'none',
                 },
                 '& .MuiInput-underline:after': {
-                  borderBottom: 'none',
+                  borderBottom: `2px solid ${isDarkMode ? '#fff' : '#10a37f'}`,
+                },
+                '& .MuiInput-underline:after': {
+                  borderBottom: `2px solid ${isDarkMode ? '#fff' : '#10a37f'}`,
+                },
+                '& .MuiInput-underline:hover:after': {
+                  borderBottom: `2px solid ${isDarkMode ? '#fff' : '#10a37f'}`,
                 },
                 '& .MuiInputBase-input': {
                   padding: '8px 0',
@@ -519,7 +541,7 @@ const ChatInterface = () => {
               <IconButton
                 onClick={toggleListening}
                 sx={{
-                  color: isListening ? '#ff4444' : '#fff',
+                  color: isListening ? '#ff4444' : (isDarkMode ? '#fff' : '#333'),
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'scale(1.1)',

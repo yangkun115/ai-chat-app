@@ -1,25 +1,40 @@
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import ChatInterface from './components/ChatInterface';
+import { ThemeProvider } from './context/ThemeContext';
+import { useTheme } from './context/ThemeContext';
+import './styles/theme.css';
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1976d2',
+const ThemeWrapper = ({ children }) => {
+  const { isDarkMode } = useTheme();
+  
+  const theme = createTheme({
+    palette: {
+      mode: isDarkMode ? 'dark' : 'light',
+      primary: {
+        main: '#1976d2',
+      },
+      secondary: {
+        main: '#dc004e',
+      },
     },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+  });
+
+  return (
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </MuiThemeProvider>
+  );
+};
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ChatInterface />
+    <ThemeProvider>
+      <ThemeWrapper>
+        <ChatInterface />
+      </ThemeWrapper>
     </ThemeProvider>
   );
 }

@@ -1,0 +1,20 @@
+:root {
+  --background-light: #ffffff;
+  --text-light: #333333;
+  --background-dark: #1a1a1a;
+  --text-dark: #ffffff;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-theme {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+body.dark-theme {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+} 
