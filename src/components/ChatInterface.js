@@ -185,7 +185,7 @@ const ChatInterface = () => {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer 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',
+          'Authorization': `Bearer ${process.env.REACT_APP_OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -522,9 +522,6 @@ const ChatInterface = () => {
                 },
                 '& .MuiInput-underline:hover:before': {
                   borderBottom: 'none',
-                },
-                '& .MuiInput-underline:after': {
-                  borderBottom: `2px solid ${isDarkMode ? '#fff' : '#10a37f'}`,
                 },
                 '& .MuiInput-underline:after': {
                   borderBottom: `2px solid ${isDarkMode ? '#fff' : '#10a37f'}`,
